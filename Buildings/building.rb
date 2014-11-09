@@ -2,10 +2,10 @@ require_relative '../Utilities/Pos'
 require_relative '../game'
 
 class Building
-  def initialize(position,size,health,buildTime)
+  def initialize(position,size,health,buildTime,symbol,color,isZombie)
     include ClassLevelInheritableAttributes
-    inheritable_attributes :pos, :buildingHealth, :buildingSize, :isProducing, :productionProgress, :isReady, :productionQueue, :currentProduction, :rallyPos, :productionPos, :buildTime
-    @pos, @buildingHealth, @buildingSize = position, health, size
+    inheritable_attributes :pos, :health, :buildingSize, :isProducing, :productionProgress, :isReady, :productionQueue, :currentProduction, :rallyPos, :productionPos, :buildTime, :symbol, :color, :isZombie
+    @pos, @health, @buildingSize = position, health, size
     @isProducing = false
     @productionProgress = 0;
     @isReady = true;
@@ -13,6 +13,9 @@ class Building
     @productionPos = Pos.new(@pos.x, @pox.y - size)
     @rallyPos = @productionPos
     @buildTime = buildTime
+    @symbol = symbol
+    @color = color
+    @isZombie = isZombie
   end
 
   def step

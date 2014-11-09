@@ -1,8 +1,10 @@
 class Worker < Unit
   def initialize(position)
     HEALTH = 100
+    PRODUCTION_TIME = 10
+    AGGRO_RANGE = 10
     SYMBOL = "W"
-    super(position,HEALTH,1,"LightSkyBlue",SYMBOL)
+    super(position,HEALTH,1,"LightSkyBlue",SYMBOL,PRODUCTION_TIME,AGGRO_RANGE)
     @isBuilding = false
     @buildQueue - Array.new
     @currentBuilding = nil

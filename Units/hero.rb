@@ -1,17 +1,19 @@
 class Hero < Unit
-  def initialize(position,productionTime)
+  def initialize(position,productionTime,isZombie)
     HEALTH = 100
     PRODUCTION_TIME = productionTime
+    RANGE = 10
+    AGGRO_RANGE = 10
     SYMBOL = ""
     COLOR = ""
     if(isZombie)
-      SYMBOL = "H"
+      SYMBOL = "$"
       COLOR = "gold2"
     else
-      SYMBOL = "H"
+      SYMBOL = "$"
       COLOR = "gold2"
     end
-    super(position,HEALTH,10,COLOR,SYMBOL,PRODUCTION_TIME)
+    super(position,HEALTH,RANGE,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombie)
     @spellBook = Hash.new
     @isCasting = false
     @castingPosition = nil
