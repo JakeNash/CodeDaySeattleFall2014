@@ -2,12 +2,12 @@ require_relative '../Utilities/Pos'
 require_relative '../game'
 
 class Unit
-  def initialize(position,health)
+  def initialize(position,health,range)
     include ClassLevelInheritableAttributes
     inheritable_attributes :pos, :unitHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range
     @pos, @unitHealth = position, health
-    @range = 0;
-    defaultParameters()
+    @range = range;
+    defaultParameters
   end
 
   def defaultParameters
@@ -19,6 +19,7 @@ class Unit
     @moveQueue = Array.new
     @moveObjective = nil;
     @attackTarget = nil;
+    #TODO: Add production time
   end
 
   def step
@@ -53,17 +54,16 @@ class Unit
       damage = damageCalculate(self, @attackTarget)
       @attackTarget.unitHealth
     end
-    #TODO: AI to decide what to attack next
   end
 
   def damageCalculate(unit1,unit2)
     #TODO: calculate damage
   end
 
-  def moveTo(Pos)
+  def moveTo(pos)
     defaultParameters
     @isMoving = true;
-    @moveObjective = Pos
+    @moveObjective = pos
   end
 
   def setMoveQueue(posArr)   
@@ -75,20 +75,20 @@ class Unit
     #TODO: AI to decide next target
   end
 
-  def attackMove(Pos)
+  def attackMove(pos)
     defaultParameters
     @isAttacking = true
-    @attackPosition = Pos
+    @attackPosition = pos
   end
 
   def attackUnit(u)
-    defaultParameters()
+    defaultParameters
     @isAttacking = true
     #TODO: attacking unit
   end
 
   def hold
-    defaultParameters()
+    defaultParameters
     @isHolding = true
   end
 end

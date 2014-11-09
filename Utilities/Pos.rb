@@ -1,9 +1,17 @@
 class Pos
   def initialize(x,y)
-    @xPos, @yPos = x, y
+    @x, @y = x, y
   end
 
-  def distance(pos1,pos2)
-    return (pos2.y-pos1y).abs + (pos2.x-pos1.x).abs
+  def x
+    @x
+  end
+
+  def y
+    @y
+  end
+
+  def distance_to(other)
+    (other.x - @x).abs + (other.y - @y).abs
   end
 end
