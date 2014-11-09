@@ -4,13 +4,12 @@ require_relative './graphics'
 # class responsible for the character representations and their movements
 class Character
 
-  def initialize (symbol, color, position, building_center, board)
+  def initialize (symbol, color, position, board)
     @symbol = symbol
     @color = color
     @position = position
     @board = board
     @moved = true
-    @building = building_center
   end
 
   def board
@@ -33,9 +32,9 @@ class Character
     @color
   end
 
-  def building
-    @building
-  end
+  # def building
+  #   @building
+  # end
 
   def move (delta_x, delta_y)
     moved = true
@@ -56,52 +55,48 @@ class Character
   All_Colors = ['green', 'gold2', 'LightSkyBlue']
 end
 
-class BuildingCenter < Character
+# class BuildingCenter < Character
   
-  def initialize(board, position)
-    super("L", 'cyan', position, true, board)
-  end
-end
+#   def initialize(board, position)
+#     super("L", 'cyan', position, true, board)
+#   end
+# end
 
-class BuildingMiddle < Character
+# class BuildingMiddle < Character
 
-  def initialize (board, position)
-    super("*", 'grey', position, false, board)
-  end
-end
+#   def initialize (board, position)
+#     super("*", 'grey', position, false, board)
+#   end
+# end
 
-class BuildingVerticalBorder < Character
+# class BuildingVerticalBorder < Character
 
-  def initialize (board, position)
-    super("|", 'grey', position, false, board)
-  end
-end
+#   def initialize (board, position)
+#     super("|", 'grey', position, false, board)
+#   end
+# end
 
-class BuildingHorizontalBorder < Character
+# class BuildingHorizontalBorder < Character
 
-  def initialize (board, position)
-    super("-", 'grey', position, false, board)
-  end
-end
+#   def initialize (board, position)
+#     super("-", 'grey', position, false, board)
+#   end
+# end
 
-class BuildingCorner < Character
+# class BuildingCorner < Character
 
-  def initialize (board, position)
-    super("+", 'grey', position, false, board)
-  end
-end
+#   def initialize (board, position)
+#     super("+", 'grey', position, false, board)
+#   end
+# end
 
 class Board
 
   def initialize (game)
     @grid = Array.new(num_rows) {Array.new(num_columns)}
-    @current_character = BuildingCenter.new(self, [10,10])
+    @current_character = Character.new("@", 'grey', [11,10], self)
     @game = game
     @delay = 500
-    @building_corner = BuildingCorner.new(self, [10,11])
-    @building_middle = BuildingMiddle.new(self, [10,12])
-    @building_vertical = BuildingVerticalBorder.new(self, [10,13])
-    @building_horizontal = BuildingHorizontalBorder.new(self, [10,14])
     @i = 0
   end
 
@@ -264,13 +259,13 @@ class Board
   end
 
   def draw
-    @game.draw_character(@current_character, @current_pos)
-    if @current_character.building
-      @game.draw_character(@building_corner, @other_pos)
-      @game.draw_character(@building_middle, @other_pos)
-      @game.draw_character(@building_vertical, @other_pos)
-      @game.draw_character(@building_horizontal, @other_pas)
-    end
+    @current_pos = @game.draw_character(@current_character, @current_pos)
+    # if @current_character.building
+    #   @other_pos = @game.draw_character(@building_corner, @other_pos)
+    #   @other1_pos = @game.draw_character(@building_middle, @other1_pos)
+    #   @other2_pos = @game.draw_character(@building_vertical, @other2_pos)
+    #   @other3_pos = @game.draw_character(@building_horizontal, @other3_pas)
+    # end
   end
 
   def new_unit (position, unit)
@@ -278,25 +273,25 @@ class Board
   end
 
   def new_building (position, building)
-    radius = building.size
-    @grid[position.x - radius][position.y - radius] = @building_corner
-    @grid[position.x + radius][position.y + radius] = @building_corner
-    @grid[position.x + radius][position.y - radius] = @building_corner
-    @grid[position.x - radius][position.y + radius] = @building_corner
-    for i in 0..radius-1 do
-      @grid[position.x - i][position.y] = @building_middle
-      @grid[position.x + i][position.y] = @building_middle
-      @grid[position.x][position.y - i] = @building_middle
-      @grid[position.x][position.y + i] = @building_middle
-      @grid[position.x - radius][position.y + i] = @building_vertical
-      @grid[position.x - radius][position.y - i] = @building_vertical
-      @grid[position.x + radius][position.y + i] = @building_vertical
-      @grid[position.x + radius][position.y - i] = @building_vertical
-      @grid[position.x + i][position.y - radius] = @building_horizontal
-      @grid[position.x - i][position.y - radius] = @building_horizontal
-      @grid[position.x + i][position.y + radius] = @building_horizontal
-      @grid[position.x - i][position.y + radius] = @building_horizontal
-    end
+  #   radius = building.size
+  #   @grid[position.x - radius][position.y - radius] = @building_corner
+  #   @grid[position.x + radius][position.y + radius] = @building_corner
+  #   @grid[position.x + radius][position.y - radius] = @building_corner
+  #   @grid[position.x - radius][position.y + radius] = @building_corner
+  #   for i in 0..radius-1 do
+  #     @grid[position.x - i][position.y] = @building_middle
+  #     @grid[position.x + i][position.y] = @building_middle
+  #     @grid[position.x][position.y - i] = @building_middle
+  #     @grid[position.x][position.y + i] = @building_middle
+  #     @grid[position.x - radius][position.y + i] = @building_vertical
+  #     @grid[position.x - radius][position.y - i] = @building_vertical
+  #     @grid[position.x + radius][position.y + i] = @building_vertical
+  #     @grid[position.x + radius][position.y - i] = @building_vertical
+  #     @grid[position.x + i][position.y - radius] = @building_horizontal
+  #     @grid[position.x - i][position.y - radius] = @building_horizontal
+  #     @grid[position.x + i][position.y + radius] = @building_horizontal
+  #     @grid[position.x - i][position.y + radius] = @building_horizontal
+  #   end
     @grid[position.x][position.y] = building
   end
 
@@ -412,7 +407,7 @@ class Game
     @canvas = GameCanvas.new
     @photo = Photo.new(self)
     @image = TkPhotoImage.new
-    @image.file = "Doctor2Final.gif"
+    @image.file = "HERO.gif"
     label = TkLabel.new(@root)
     label.image = @image
     label.place('height' => @photo.photo_size, 'width' => @photo.photo_size, 'x' => 10 + @map.map_size + @info.width, 'y' => @board.block_size * @board.num_rows + 10)
