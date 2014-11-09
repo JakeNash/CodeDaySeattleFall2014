@@ -33,6 +33,8 @@ class Unit
           moveTo(pos)
           @isReady = false
           moveNext
+        else
+          @isMoving = false
         end
       else
         moveNext
