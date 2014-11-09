@@ -30,7 +30,7 @@ end
 
 class GameCanvas
   def initialize
-    @canvas = TkCanvas.new('background' => 'grey')
+    @canvas = TkCanvas.new('background' => 'black')
   end
 
   def place(height, width, x, y)
