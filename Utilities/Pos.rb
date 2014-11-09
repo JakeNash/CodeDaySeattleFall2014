@@ -12,6 +12,6 @@ class Pos
   end
 
   def distance_to(other)
-    (other.x - @x).abs + (other.y - @y).abs
+    return Math.sqrt((other.x - @x)*(other.x - @x) + (other.y - @y)*(other.y - @y))
   end
 end
