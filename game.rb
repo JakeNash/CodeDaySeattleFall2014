@@ -168,7 +168,11 @@ class Game
   end
 
   def draw_character (character, other_character, old=nil, other_old=nil)
-    if old != nil and other_old != nil
+    charmoved = false
+    othercharmoved = false
+    character.each {|char| if (char.moved) then (charmoved = true) end }
+    other_character.each {|char| if (char.moved) then (othercharmoved = true) end }
+    if old != nil and charmoved and othercharmoved and other_old != nil
       old.each{|char| char.remove}
       other_old.each{|char| char.remove}
     end
