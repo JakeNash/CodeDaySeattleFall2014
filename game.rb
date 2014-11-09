@@ -4,10 +4,10 @@ require_relative './graphics'
 # class responsible for the character representations and their movements
 class Character
 
-  def initialize (symbol, board)
+  def initialize (symbol, color, position, board)
     @symbol = symbol
-    @color = 'LightSkyBlue'
-    @position = [30, 20] # [column, row]
+    @color = color
+    @position = position
     @board = board
     @moved = true
   end
@@ -32,6 +32,10 @@ class Character
     @color
   end
 
+  # def building
+  #   @building
+  # end
+
   def move (delta_x, delta_y)
     moved = true
     if !(@board.empty_at(@position[0] + delta_x, @position[1] + delta_y))
@@ -51,27 +55,159 @@ class Character
   All_Colors = ['green', 'gold2', 'LightSkyBlue']
 end
 
+# class BuildingCenter < Character
+  
+#   def initialize(board, position)
+#     super("L", 'cyan', position, true, board)
+#   end
+# end
+
+# class BuildingMiddle < Character
+
+#   def initialize (board, position)
+#     super("*", 'grey', position, false, board)
+#   end
+# end
+
+# class BuildingVerticalBorder < Character
+
+#   def initialize (board, position)
+#     super("|", 'grey', position, false, board)
+#   end
+# end
+
+# class BuildingHorizontalBorder < Character
+
+#   def initialize (board, position)
+#     super("-", 'grey', position, false, board)
+#   end
+# end
+
+# class BuildingCorner < Character
+
+#   def initialize (board, position)
+#     super("+", 'grey', position, false, board)
+#   end
+# end
+
 class Board
 
   def initialize (game)
     @grid = Array.new(num_rows) {Array.new(num_columns)}
-    @current_character = Character.next_character(self)
+    @current_character = Character.new("@", 'grey', [11,10], self)
     @game = game
     @delay = 500
+    @i = 0
   end
 
-  def nearest_unit (position, range)
-    low_x = position.x - range
-    high_x = position.x + range
-    low_y = position.y - range
-    high_y = position.y + range
-    minDistance = 500
+  def nearest_enemy_unit (unit, objective_pos)
+    if (unit.position.x - objective_pos.x).abs > (unit.position.y - objective_pos.y).abs and unit.position.x - objective_pos.x >= 0
+      low_x = objective_pos.x
+      high_x = unit.position.x
+      if unit.position.y < objective_pos.y
+        low_y = unit.position.y - unit.aggroRange
+        high_y = unit.position.y + (objective_pos.y - unit.position.y)
+      else
+        low_y = unit.position.y - (unit.position.y - objective_pos.y)
+        high_y = unit.position.y + unit.aggroRange
+      end
+    elsif (unit.position.x - objective_pos.x).abs > (unit.position.y - objective_pos.y).abs and unit.position.x - objective_pos.x < 0
+      high_x = objective_pos.x
+      low_x = unit.position.x
+      if unit.position.y < objective_pos.y
+        low_y = unit.position.y - unit.aggroRange
+        high_y = unit.position.y + (objective_pos.y - unit.position.y)
+      else
+        low_y = unit.position.y - (unit.position.y - objective_pos.y)
+        high_y = unit.position.y + unit.aggroRange
+      end
+    elsif (unit.position.x - objective_pos.x).abs < (unit.position.y - objective_pos.y).abs and unit.position.y - objective_pos.y >= 0
+      if unit.position.x < objective_pos.x
+        low_x = unit.position.x - unit.aggroRange
+        high_x = unit.position.x + (objective_pos.x - unit.position.x)
+      else
+        low_x = unit.position.x - (unit.position.x - objective_pos.x)
+        high_x = unit.position.x + unit.aggroRange
+      end
+      low_y = objective_pos.y
+      high_y = unit.position.y
+    else
+      if unit.position.x < objective_pos.x
+        low_x = unit.position.x - unit.aggroRange
+        high_x = unit.position.x + (objective_pos.x - unit.position.x)
+      else
+        low_x = unit.position.x - (unit.position.x - objective_pos.x)
+        high_x = unit.position.x + unit.aggroRange
+      end
+      high_y = objective_pos.y
+      low_y = unit.position.y
+    end
+    minDistance = distanceTo(objective_pos)
     output = nil
     for i in low_x..high_x do
       for j in low_y..high_y do
-        unless grid[i][j] == nil
-          other_unit = Pos.new(i,j)
-          dist = distanceTo(other_unit)
+        unless grid[i][j] == nil or (i == position.x and j == position.y) or (grid[i][j].isZombie and unit.isZombie) or (!grid[i][j].isZombie and !unit.isZombie)
+          other_unit = grid[i][j]
+          dist = distanceTo(other_unit.position)
+          if dist < minDistance
+            minDistance = dist
+            output = other_unit
+          end
+        end
+      end
+    end
+    output
+  end
+
+  def nearest_friendly_unit (unit, objective_pos)
+    if (unit.position.x - objective_pos.x).abs > (unit.position.y - objective_pos.y).abs and unit.position.x - objective_pos.x >= 0
+      low_x = objective_pos.x
+      high_x = unit.position.x
+      if unit.position.y < objective_pos.y
+        low_y = unit.position.y - unit.aggroRange
+        high_y = unit.position.y + (objective_pos.y - unit.position.y)
+      else
+        low_y = unit.position.y - (unit.position.y - objective_pos.y)
+        high_y = unit.position.y + unit.aggroRange
+      end
+    elsif (unit.position.x - objective_pos.x).abs > (unit.position.y - objective_pos.y).abs and unit.position.x - objective_pos.x < 0
+      high_x = objective_pos.x
+      low_x = unit.position.x
+      if unit.position.y < objective_pos.y
+        low_y = unit.position.y - unit.aggroRange
+        high_y = unit.position.y + (objective_pos.y - unit.position.y)
+      else
+        low_y = unit.position.y - (unit.position.y - objective_pos.y)
+        high_y = unit.position.y + unit.aggroRange
+      end
+    elsif (unit.position.x - objective_pos.x).abs < (unit.position.y - objective_pos.y).abs and unit.position.y - objective_pos.y >= 0
+      if unit.position.x < objective_pos.x
+        low_x = unit.position.x - unit.aggroRange
+        high_x = unit.position.x + (objective_pos.x - unit.position.x)
+      else
+        low_x = unit.position.x - (unit.position.x - objective_pos.x)
+        high_x = unit.position.x + unit.aggroRange
+      end
+      low_y = objective_pos.y
+      high_y = unit.position.y
+    else
+      if unit.position.x < objective_pos.x
+        low_x = unit.position.x - unit.aggroRange
+        high_x = unit.position.x + (objective_pos.x - unit.position.x)
+      else
+        low_x = unit.position.x - (unit.position.x - objective_pos.x)
+        high_x = unit.position.x + unit.aggroRange
+      end
+      high_y = objective_pos.y
+      low_y = unit.position.y
+    end
+    minDistance = distanceTo(objective_pos)
+    output = nil
+    for i in low_x..high_x do
+      for j in low_y..high_y do
+        unless grid[i][j] == nil or (i == position.x and j == position.y) or (grid[i][j].isZombie and !unit.isZombie) or (!grid[i][j].isZombie and unit.isZombie)
+          other_unit = grid[i][j]
+          dist = distanceTo(other_unit.position)
           if dist < minDistance
             minDistance = dist
             output = other_unit
@@ -111,9 +247,7 @@ class Board
   def empty_at (point)
     if !(point[0] >= 0 and point[0] < num_columns)
       return false
-    elsif point[1] < 1
-      return true
-    elsif point[1] >= num_rows
+    elsif !(point[1] >= 0 and point[1] < num_rows)
       return false
     end
     @grid[point[1]][point[0]] == nil
@@ -126,13 +260,46 @@ class Board
 
   def draw
     @current_pos = @game.draw_character(@current_character, @current_pos)
+    # if @current_character.building
+    #   @other_pos = @game.draw_character(@building_corner, @other_pos)
+    #   @other1_pos = @game.draw_character(@building_middle, @other1_pos)
+    #   @other2_pos = @game.draw_character(@building_vertical, @other2_pos)
+    #   @other3_pos = @game.draw_character(@building_horizontal, @other3_pas)
+    # end
   end
 
-  def new_unit
-    
+  def new_unit (position, unit)
+    @grid[position.x][position.y] = unit
   end
 
-  def new_building
+  def new_building (position, building)
+  #   radius = building.size
+  #   @grid[position.x - radius][position.y - radius] = @building_corner
+  #   @grid[position.x + radius][position.y + radius] = @building_corner
+  #   @grid[position.x + radius][position.y - radius] = @building_corner
+  #   @grid[position.x - radius][position.y + radius] = @building_corner
+  #   for i in 0..radius-1 do
+  #     @grid[position.x - i][position.y] = @building_middle
+  #     @grid[position.x + i][position.y] = @building_middle
+  #     @grid[position.x][position.y - i] = @building_middle
+  #     @grid[position.x][position.y + i] = @building_middle
+  #     @grid[position.x - radius][position.y + i] = @building_vertical
+  #     @grid[position.x - radius][position.y - i] = @building_vertical
+  #     @grid[position.x + radius][position.y + i] = @building_vertical
+  #     @grid[position.x + radius][position.y - i] = @building_vertical
+  #     @grid[position.x + i][position.y - radius] = @building_horizontal
+  #     @grid[position.x - i][position.y - radius] = @building_horizontal
+  #     @grid[position.x + i][position.y + radius] = @building_horizontal
+  #     @grid[position.x - i][position.y + radius] = @building_horizontal
+  #   end
+    @grid[position.x][position.y] = building
+  end
+
+  def new_spell (position, spell)
+    @grid[position.x][position.y] = spell
+  end
+
+  def move_unit (position, unit)
     
   end
 end
@@ -210,6 +377,10 @@ class Game
     @resources
   end
 
+  def board
+    @board
+  end
+
   # creates a canvas and the board that interacts with it
   def set_board
     @canvas = GameCanvas.new
@@ -236,7 +407,7 @@ class Game
     @canvas = GameCanvas.new
     @photo = Photo.new(self)
     @image = TkPhotoImage.new
-    @image.file = "VillagerFinal.gif"
+    @image.file = "HERO.gif"
     label = TkLabel.new(@root)
     label.image = @image
     label.place('height' => @photo.photo_size, 'width' => @photo.photo_size, 'x' => 10 + @map.map_size + @info.width, 'y' => @board.block_size * @board.num_rows + 10)
