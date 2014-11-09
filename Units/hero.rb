@@ -14,7 +14,7 @@ class Hero < Unit
       symbol = "$"
       color = "gold2"
     end
-    super(position,health,range,color,symbol,production_time,aggro_range,isZombieCOST)
+    super(position,health,range,color,symbol,production_time,aggro_range,isZombie,cost)
     @spellBook = Hash.new
     @isCasting = false
     @castingPosition = nil

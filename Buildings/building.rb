@@ -19,6 +19,10 @@ class Building
     @cost = cost
   end
 
+  def to_array
+    [@symbol, @color, [@pos.x, @pos.y]]
+  end
+
   def step
     if(@isProducing)
       if(@isReady)

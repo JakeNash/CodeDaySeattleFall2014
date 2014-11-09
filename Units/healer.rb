@@ -2,21 +2,21 @@
 
 class Healer < Unit
   def initialize(position,isZombie)
-    HEALTH = 100
-    PRODUCTION_TIME = 10
-    RANGE = 5
-    AGGRO_RANGE = 10
-    COST = 10
-    SYMBOL = ""
-    COLOR = ""
+    health = 100
+    production_time = 10
+    range = 5
+    aggro_range = 10
+    cost = 10
+    symbol = ""
+    color = ""
     if(isZombie)
-      SYMBOL = "H"
-      COLOR = "green"
+      symbol = "H"
+      color = "green"
     else
-      SYMBOL = "H"
-      COLOR = "LightSkyBlue"
+      symbol = "H"
+      color = "LightSkyBlue"
     end
-    super(position,HEALTH,RANGE,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombie,COST)
+    super(position,health,range,color,symbol,production_time,aggro_range,isZombie,cost)
     @isHealing = true
   end
 

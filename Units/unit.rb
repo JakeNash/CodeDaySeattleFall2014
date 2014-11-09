@@ -1,10 +1,11 @@
 require_relative '../Utilities/Pos'
 require_relative '../game'
+require_relative './class_level'
 
 class Unit
   def initialize(position,health,range,color,symbol,productionTime,aggroRange,isZombie,cost)
-    include ClassLevelInheritableAttributes
-    inheritable_attributes :pos, :health, :maxHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range, :color, :symbol, :productionTime, :aggroRange, :isZombie, :cost
+#    include ClassLevelInheritableAttributes
+#    inheritable_attributes :pos, :health, :maxHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range, :color, :symbol, :productionTime, :aggroRange, :isZombie, :cost
     @pos, @health, @maxHealth = position, health, health
     @range = range
     @color = color
@@ -14,6 +15,22 @@ class Unit
     @isZombie = isZombie
     @cost = cost
     defaultParameters
+  end
+
+  def symbol
+    @symbol
+  end
+
+  def color
+    @color
+  end
+
+  def position
+    @pos
+  end
+
+  def to_array
+    [@symbol, @color, [@pos.x, @pos.y]]
   end
 
   def defaultParameters

@@ -1,13 +1,15 @@
+require_relative './unit'
+
 class Worker < Unit
   def initialize(position)
-    HEALTH = 100
-    PRODUCTION_TIME = 10
-    AGGRO_RANGE = 10
-    SYMBOL = "W"
-    COST = 10
-    super(position,HEALTH,1,"LightSkyBlue",SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,false,COST)
+    health = 100
+    production_time = 10
+    aggro_range = 10
+    symbol = "W"
+    cost = 10
+    super(position,health,1,"LightSkyBlue",symbol,production_time,aggro_range,false,cost)
     @isBuilding = false
-    @buildQueue - Array.new
+    @buildQueue = Array.new
     @currentBuilding = nil
     @currentBuildingPos = nil
   end
