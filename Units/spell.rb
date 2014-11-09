@@ -6,6 +6,6 @@ class Spell
   end
 
   def placeOnGrid(position)
-    Board.new_spell(position,self)
+    Game.game.board.new_spell(position,self)
   end
 end

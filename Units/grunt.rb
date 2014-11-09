@@ -3,6 +3,7 @@ class Grunt < Unit
     HEALTH = 100
     PRODUCTION_TIME = 10
     AGGRO_RANGE = 10
+    COST = 10
     SYMBOL = ""
     COLOR = ""
     if(isZombie)
@@ -12,6 +13,6 @@ class Grunt < Unit
       SYMBOL = "G"
       COLOR = "LightSkyBlue"
     end
-    super(position,HEALTH,1,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombie)
+    super(position,HEALTH,1,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombie,COSTa)
   end
 end

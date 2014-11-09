@@ -4,7 +4,8 @@ class Worker < Unit
     PRODUCTION_TIME = 10
     AGGRO_RANGE = 10
     SYMBOL = "W"
-    super(position,HEALTH,1,"LightSkyBlue",SYMBOL,PRODUCTION_TIME,AGGRO_RANGE)
+    COST = 10
+    super(position,HEALTH,1,"LightSkyBlue",SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,false,COST)
     @isBuilding = false
     @buildQueue - Array.new
     @currentBuilding = nil
@@ -21,8 +22,9 @@ class Worker < Unit
       
   def buildNext
     if(@currentBuilding.buildTime == 0)
-      Board.new_building(@currentBuildingPos,@currentBuilding)
+      Game.game.board.new_building(@currentBuildingPos,@currentBuilding)
       building = buildQueue.pop
+      Game.game.resources -= building.cost
       if(building != nil)
         @currentBuilding = building[0] #building object
         @currentBuildingPos = building[1] #building position

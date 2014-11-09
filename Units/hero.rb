@@ -4,6 +4,7 @@ class Hero < Unit
     PRODUCTION_TIME = productionTime
     RANGE = 10
     AGGRO_RANGE = 10
+    COST = 0
     SYMBOL = ""
     COLOR = ""
     if(isZombie)
@@ -13,7 +14,7 @@ class Hero < Unit
       SYMBOL = "$"
       COLOR = "gold2"
     end
-    super(position,HEALTH,RANGE,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombie)
+    super(position,HEALTH,RANGE,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombieCOST)
     @spellBook = Hash.new
     @isCasting = false
     @castingPosition = nil

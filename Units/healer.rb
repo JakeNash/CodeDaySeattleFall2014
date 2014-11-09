@@ -6,6 +6,7 @@ class Healer < Unit
     PRODUCTION_TIME = 10
     RANGE = 5
     AGGRO_RANGE = 10
+    COST = 10
     SYMBOL = ""
     COLOR = ""
     if(isZombie)
@@ -15,7 +16,7 @@ class Healer < Unit
       SYMBOL = "H"
       COLOR = "LightSkyBlue"
     end
-    super(position,HEALTH,RANGE,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombie)
+    super(position,HEALTH,RANGE,COLOR,SYMBOL,PRODUCTION_TIME,AGGRO_RANGE,isZombie,COST)
     @isHealing = true
   end
 

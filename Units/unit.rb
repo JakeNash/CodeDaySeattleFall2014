@@ -2,9 +2,9 @@ require_relative '../Utilities/Pos'
 require_relative '../game'
 
 class Unit
-  def initialize(position,health,range,color,symbol,productionTime,aggroRange,isZombie)
+  def initialize(position,health,range,color,symbol,productionTime,aggroRange,isZombie,cost)
     include ClassLevelInheritableAttributes
-    inheritable_attributes :pos, :health, :maxHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range, :color, :symbol, :productionTime, :aggroRange, :isZombie
+    inheritable_attributes :pos, :health, :maxHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range, :color, :symbol, :productionTime, :aggroRange, :isZombie, :cost
     @pos, @health, @maxHealth = position, health, health
     @range = range
     @color = color
@@ -12,6 +12,7 @@ class Unit
     @productionTime = productionTime
     @aggroRange = aggroRange
     @isZombie = isZombie
+    @cost = cost
     defaultParameters
   end
 
@@ -46,7 +47,7 @@ class Unit
     elsif(@isAttacking)
       attackNext
     else
-      enemy = Board.nearest_enemy_aggro(self)
+      enemy = Game.game.board.nearest_enemy_aggro(self)
       if(emeny != nil)
         @attackTarget = enemy
         attackNext
@@ -66,14 +67,14 @@ class Unit
       end
     end
     @pos = bestMove
-    Board.move_unit(@pos,self)
+    Game.game.board.move_unit(@pos,self)
   end
 
   def getValidMoves
     arr = Array.new
     for i in (@pos.x - 1)..(@pos.x + 1)
       for j in (@pos.y - 1)..(@pos.y + 1)
-        if(Board.empty_at([i,j]))
+        if(Game.game.board.empty_at([i,j]))
           arr.push(Pos.new(i,j))
         end
       end
@@ -107,7 +108,7 @@ class Unit
   end
 
   def damageCalculate(target)
-    #TODO: calculate damage
+    return 5 + rand(10)
   end
 
   def moveTo(pos)
@@ -121,7 +122,7 @@ class Unit
   end
   
   def findNextTarget
-    @attackTarget = Board.nearest_enemy_unit(self,@moveObjective)
+    @attackTarget = Game.game.board.nearest_enemy_unit(self,@moveObjective)
   end
 
   def isInAggroRange(unit)

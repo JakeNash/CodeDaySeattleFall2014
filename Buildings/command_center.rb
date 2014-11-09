@@ -5,6 +5,7 @@ class CommandCenter < Building
     SIZE = 5
     HEALTH = 100
     BUILD_TIME = 10
+    COST = 100
     SYMBOL = ""
     COLOR = ""
     if(isZombie)
@@ -14,7 +15,7 @@ class CommandCenter < Building
       SYMBOL = "C"
       COLOR = "LightSkyBlue"
     end
-    super(position,SIZE,HEALTH,BUILD_TIME,SYMBOL,COLOR,isZombie)
+    super(position,SIZE,HEALTH,BUILD_TIME,SYMBOL,COLOR,isZombie,COST)
     @workerCount = 0
   end
 
@@ -33,12 +34,12 @@ class CommandCenter < Building
   end
 
   def calculateIncome
-    #TODO: calculate income based on workers with exponential decay / log
+    return @workerCount*5
   end
 
   def step
     super
-    Game.resources += calculateIncome
+    Game.game.resources += calculateIncome
   end
 end
       

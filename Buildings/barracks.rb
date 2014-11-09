@@ -7,6 +7,7 @@ class Barracks < Building
     SIZE = 3
     HEALTH = 100
     BUILD_TIME = 10
+    COST = 100
     SYMBOL = ""
     COLOR = ""
     if(isZombie)
@@ -16,7 +17,7 @@ class Barracks < Building
       SYMBOL = "B"
       COLOR = "LightSkyBlue"
     end
-    super(position,SIZE,HEALTH,BUILD_TIME,SYMBOL,COLOR,isZombie)
+    super(position,SIZE,HEALTH,BUILD_TIME,SYMBOL,COLOR,isZombie,COST)
     @canBuildMelee = true;
     @canBuildRanged = false;
     @canBuildHealer = false;
