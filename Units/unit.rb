@@ -2,14 +2,16 @@ require_relative '../Utilities/Pos'
 require_relative '../game'
 
 class Unit
-  def initialize(position,health,range,color,symbol,productionTime)
+  def initialize(position,health,range,color,symbol,productionTime,aggroRange,isZombie)
     include ClassLevelInheritableAttributes
-    inheritable_attributes :pos, :unitHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range, :color, :symbol, :productionTime
-    @pos, @unitHealth = position, health
+    inheritable_attributes :pos, :health, :maxHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range, :color, :symbol, :productionTime, :aggroRange, :isZombie
+    @pos, @health, @maxHealth = position, health, health
     @range = range
     @color = color
     @symbol = symbol
     @productionTime = productionTime
+    @aggroRange = aggroRange
+    @isZombie = isZombie
     defaultParameters
   end
 
@@ -43,6 +45,12 @@ class Unit
       end
     elsif(@isAttacking)
       attackNext
+    else
+      enemy = Board.nearest_enemy_aggro(self)
+      if(emeny != nil)
+        @attackTarget = enemy
+        attackNext
+      end
     end
   end
 
@@ -76,20 +84,24 @@ class Unit
   def attackNext
     #targeting
     if(@attackTarget != nil)
-      if(@attackTarget.unitHealth < 1)
+      if(@attackTarget.health < 1)
         @attackTarget = findNextTarget
       end
     else
       @attackTarget = findNextTarget
     end
 
-    #attack or move closer
-    if(isInRangeOfUnit(@attackTarget))
-      damage = damageCalculate(@attackTarget)
-      @attackTarget.unitHealth -= damage
-    else
-      attackMove(@attackTarget.pos)
-      @moveObjective = @attackTarget.pos
+    if(@attackTarget != nil) #attack or move closer if target found
+      if(isInRangeOfUnit(@attackTarget))
+        damage = damageCalculate(@attackTarget)
+        @attackTarget.health -= damage
+      else
+        attackMove(@attackTarget.pos)
+        @moveObjective = @attackTarget.pos
+        moveNext
+      end
+    else #target not found on way to path
+      @moveObjective = @attackObjective
       moveNext
     end
   end
@@ -109,7 +121,11 @@ class Unit
   end
   
   def findNextTarget
-    @attackTarget = Board.nearest_enemy_unit
+    @attackTarget = Board.nearest_enemy_unit(self,@moveObjective)
+  end
+
+  def isInAggroRange(unit)
+    return (unit.pos.x - this.pox.x).abs <= @aggroRange && (unit.pos.y - this.pos.y).abs <= @aggroRange
   end
 
   def isInRangeOfUnit(unit)

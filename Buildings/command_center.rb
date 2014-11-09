@@ -1,15 +1,25 @@
 require_relative '../Units/worker.rb'
 
 class CommandCenter < Building
-  def initialize(position)
+  def initialize(position,isZombie)
     SIZE = 5
     HEALTH = 100
-    super(position,SIZE,HEALTH)
+    BUILD_TIME = 10
+    SYMBOL = ""
+    COLOR = ""
+    if(isZombie)
+      SYMBOL = "C"
+      COLOR = "green"
+    else
+      SYMBOL = "C"
+      COLOR = "LightSkyBlue"
+    end
+    super(position,SIZE,HEALTH,BUILD_TIME,SYMBOL,COLOR,isZombie)
     @workerCount = 0
   end
 
   def queueProduction
-    @productionQueue.push(Worker.new)
+    @productionQueue.push(Worker.new(@productionPos,false))
   end
 
   def addWorker

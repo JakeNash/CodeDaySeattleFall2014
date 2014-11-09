@@ -5,4 +5,3 @@ class SpellEffect
     @duration = duration
   end
 end
-    
