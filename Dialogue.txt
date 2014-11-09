@@ -1,0 +1,89 @@
+*Welcome note*
+
+Level 1
+
+G- Hi ____ welcome to AsciiRTS! In mere weeks, your whole world was overturned with the invasion of the Zombies. As the only general left on AsciiWorld, it is your responsibility to create an army and lead them on missions to rescue survivors and find the vaccine!
+
+G- In order to start building up troops, buildings, and a laboratory you need to get some resources.
+
+G- You have five workers, send them to the Command Center to get resources!
+
+G- Not quite done yet, go get some more resources! Make sure you fill up your whole bar on the top of the screen.
+
+G- At the command center you can make either more workers or more resources, be smart!!
+
+G- We don't have all day! We have a world to rescue!
+
+G- Great Job! Now get out there and build some buildings. You need to build barracks, and a laboratory. (Hint: You need to build barracks before you can build any troops.)
+
+G- Use your barracks to build troops!
+
+G- Choose troops wisely, you have the option of either Melee or range troops! Range are more expensive to build, but they are also more powerful. 
+
+G- It is important to build enough troops so that you can defend from the Zombies! 
+
+*Zombies start to invade* 
+
+G- Look out!! INCOMING ZOMBIES!!!!
+
+G- Send out troops to kill the attackers.
+
+*
+
+G- Uh-oh, you did not respond quickly enough - the Zombies took over your city.  Start over.
+
+*OR*
+
+G- Whew, that was a close one! Time for a counter-attack.
+
+G- Go out and search for a neighboring village and lead your troops in an attempt to free the villagers.
+
+*Go to neighboring village*
+
+Z- You will never take us down!!!
+
+G- Watch us.
+
+*fighting*
+
+G- Retreat!! Retreat!! 
+
+G- Now you must go mine more resources in order to plan another attack.
+
+*OR*
+
+Z- Retreat!! They've recaptured the village!
+
+G- Everyone, go find the survivors!
+
+D- Thank you so much _____, you've saved us from the Zombies.
+
+G- No problem, just doing my job.
+
+D- Now we can combine efforts to find this vaccine and restore AsciiWorld to its rightful state.
+
+*Vaccine % increases*
+
+G- Great! We have made progress towards finding the vaccine.
+
+*in the distance*
+
+V- Help!! HELP!
+
+G- Oh, no! It appears that the retreating Zombies have gone into the neighboring village.
+
+G- We must go save them, but first we have to mine more resources to keep our troops up to par.
+
+*move to new village*
+
+Z- They've followed us!
+
+G- Yes, and we have more troops with us this time.
+
+*fight* 
+
+G- Oh no! Our reinforcements weren't enough, we must retreat to try again!
+
+*OR*
+
+G- We have successfully defeated the Zombies twice.

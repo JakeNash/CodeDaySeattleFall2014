@@ -48,7 +48,7 @@ class Character
     Character.new("#", board)
   end
 
-  All_Colors = ['green', 'cyan', 'LightSkyBlue']
+  All_Colors = ['green', 'gold2', 'LightSkyBlue']
 end
 
 class Board
@@ -92,7 +92,7 @@ class Board
   end
 
   def num_rows
-    35
+    25
   end
 
   # the current delay
@@ -137,6 +137,56 @@ class Board
   end
 end
 
+class Map
+
+  def initialize (game)
+    @game = game
+  end
+
+  def map_size
+    230
+  end
+end
+
+class Info
+  def initialize (game)
+    @game = game
+  end
+
+  def height
+    230
+  end
+
+  def width
+    500
+  end
+end
+
+class Photo
+
+  def initialize (game)
+    @game = game
+  end
+
+  def photo_size
+    230
+  end
+end
+
+class CommandPanel
+  
+  def initialize(game)
+    @game = game
+  end
+
+  def height
+    230
+  end
+
+  def width
+    354
+  end
+end
 
 class Game
 
@@ -146,6 +196,10 @@ class Game
     @root = GameRoot.new
     @timer = GameTimer.new
     set_board
+    set_map
+    set_info
+    set_photo
+    set_command_panel
     @running = true
     key_bindings
     buttons
@@ -163,6 +217,35 @@ class Game
     @canvas.place(@board.block_size * @board.num_rows,
                   @board.block_size * @board.num_columns, 10, 10)
     @board.draw
+  end
+
+  # creates a canvas and the map that interacts with it
+  def set_map
+    @canvas = GameCanvas.new
+    @map = Map.new(self)
+    @canvas.place(@map.map_size, @map.map_size, 10, @board.block_size * @board.num_rows + 10)
+  end
+
+  def set_info
+    @canvas = GameCanvas.new
+    @info = Info.new(self)
+    @canvas.place(@info.height, @info.width, 10 + @map.map_size, @board.block_size * @board.num_rows + 10)
+  end
+
+  def set_photo
+    @canvas = GameCanvas.new
+    @photo = Photo.new(self)
+    @image = TkPhotoImage.new
+    @image.file = "VillagerFinal.gif"
+    label = TkLabel.new(@root)
+    label.image = @image
+    label.place('height' => @photo.photo_size, 'width' => @photo.photo_size, 'x' => 10 + @map.map_size + @info.width, 'y' => @board.block_size * @board.num_rows + 10)
+  end
+
+  def set_command_panel
+    @canvas = GameCanvas.new
+    @panel = CommandPanel.new(self)
+    @canvas.place(@panel.height, @panel.width, 10 + @map.map_size + @info.width + @photo.photo_size, @board.block_size * @board.num_rows + 10)
   end
 
   def key_bindings

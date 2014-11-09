@@ -10,6 +10,10 @@ class GameRoot
     @root.bind(char, callback)
   end
 
+  def path
+    @root.path
+  end
+
   # Necessary so we can unwrap before passing to Tk in some instances.
   attr_reader :root
 end
