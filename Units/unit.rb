@@ -1,8 +1,12 @@
 require_relative '../Utilities/Pos'
+require_relative '../game'
 
 class Unit
   def initialize(position,health)
+    include ClassLevelInheritableAttributes
+    inheritable_attributes :pos, :unitHealth, :isReady, :isAttacking, :isMoving, :isHolding, :isPatrolling, :moveQueue, :moveObjective, :attackTarget, :range
     @pos, @unitHealth = position, health
+    @range = 0;
     defaultParameters()
   end
 
@@ -12,40 +16,48 @@ class Unit
     @isMoving = false
     @isHolding = false
     @isPatrolling = false
-    @patrollArr = Array.new
-    @moveQueue = Queue.new
+    @moveQueue = Array.new
     @moveObjective = nil;
     @attackTarget = nil;
   end
 
   def step
-    if(@isReady)
-      if(@isMoving)
+    if(@isMoving)
+      if(@isReady)
         pos = @moveQueue.pop
-        if(@isPatrolling)
-          @moveQueue.push(pos)
+        if(pos != nil)
+          if(@isPatrolling)
+            @moveQueue.push(pos)
+          end
+          moveTo(pos)
+          @isReady = false
+          moveNext
         end
-        moveTo(pos)
-        @isReady = false
+      else
         moveNext
-      elsif(@isAttacking)
-        @isReady = false
-        attackNext
-    else
-      if(@isMoving)
-        moveNext
-      elsif(@isAttacking)
-        attackNext
       end
+    elsif(@isAttacking)
+      attackNext
     end
   end
 
   def moveNext
-    #AI to decide next move position
+    #TODO: AI to decide next move position
   end
 
   def attackNext
-    #AI to decide what to attack next
+    if(@attackTarget != nil)
+      if(@attackTarget.unitHealth < 1)
+        @attackTarget = findNextTarget
+      end
+      damage = damageCalculate(self, @attackTarget)
+      @attackTarget.unitHealth
+    end
+    #TODO: AI to decide what to attack next
+  end
+
+  def damageCalculate(unit1,unit2)
+    #TODO: calculate damage
   end
 
   def moveTo(Pos)
@@ -55,7 +67,12 @@ class Unit
   end
 
   def setMoveQueue(posArr)   
-    @moveQueue = posArr #can I do this?
+    @moveQueue = posArr
+  end
+  
+  def findNextTarget
+    
+    #TODO: AI to decide next target
   end
 
   def attackMove(Pos)
